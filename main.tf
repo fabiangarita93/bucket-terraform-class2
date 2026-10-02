@@ -63,6 +63,16 @@ resource "aws_instance" "web_server" {
   tags = {
     Name = "Servicio-Web-Fabian"
   }
+  lifecycle {
+	replace_triggered_by = [
+		terraform_data.trigger_user_data
+	]
+  }
+}
+
+# Recurso auxiliar para rastrear cambios en el texto
+resource "terraform_data" "trigger_user_data" {
+  input = aws_instance.web_server.user_data
 }
 
 # 3. Output para obtener la URL pública en internet
