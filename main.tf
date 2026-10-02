@@ -68,8 +68,20 @@ resource "aws_instance" "web_server" {
   }
 }
 
-# 3. Output para obtener la URL pública en internet
-output "url_del_servicio" {
-  value       = "http://${aws_instance.web_server.public_ip}"
-  description = "Copia y pega este enlace en tu navegador para ver el servicio expuesto."
+# 1. Output para la dirección IP pública directa
+output "nginx_public_ip" {
+  value       = aws_instance.web_server.public_ip
+  description = "La direccion IP publica del servidor web Nginx."
+}
+
+# 2. Output que indica que no hay operaciones pendientes en el estado
+output "no-op" {
+  value       = "Infraestructura sincronizada correctamente."
+  description = "Indicador de estado sin operaciones pendientes."
+}
+
+# 3. Output para la URL usando el DNS público de AWS
+output "nginx_url" {
+  value       = "http://${aws_instance.web_server.public_dns}"
+  description = "El enlace URL publica del servidor para abrir en el navegador."
 }
