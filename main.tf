@@ -46,11 +46,11 @@ resource "aws_security_group" "web_sg" {
 # 2. Desplegar una instancia EC2 (Servidor Web Nginx)
 resource "aws_instance" "web_server" {
   ami                         = "ami-0c7217cdde317cfec" # Ubuntu Server 22.04 LTS en us-east-1
-  instance_type               = "t2.micro"             # Capa gratuita de AWS
+  instance_type               = "t2.micro"             
   vpc_security_group_ids      = [aws_security_group.web_sg.id]
-  associate_public_ip_address = true # Obligatorio para exponerlo a internet
+  associate_public_ip_address = true 
 
-  # Script automatizado para instalar Nginx al encender el servidor
+  # Modifica este texto a tu gusto para probar el cambio
   user_data = <<-EOF
               #!/bin/bash
               sudo apt-get update -y
@@ -60,19 +60,12 @@ resource "aws_instance" "web_server" {
               echo "<h1>1-oct-2026 Servicio expuesto con Exito via HCP Terraform GitOps!</h1>" | sudo tee /var/www/html/index.html
               EOF
 
+  # 🟢 ESTA ES LA LÍNEA MÁGICA: Destruye y recrea la EC2 si el user_data cambia
+  user_data_replace_on_change = true
+
   tags = {
     Name = "Servicio-Web-Fabian"
   }
-  lifecycle {
-	replace_triggered_by = [
-		terraform_data.trigger_user_data
-	]
-  }
-}
-
-# Recurso auxiliar para rastrear cambios en el texto
-resource "terraform_data" "trigger_user_data" {
-  input = aws_instance.web_server.user_data
 }
 
 # 3. Output para obtener la URL pública en internet
