@@ -57,7 +57,7 @@ resource "aws_instance" "web_server" {
               sudo apt-get install nginx -y
               sudo systemctl start nginx
               sudo systemctl enable nginx
-              echo "<h1>Servicio expuesto con Exito via HCP Terraform GitOps!</h1>" | sudo tee /var/www/html/index.html
+              echo "<h1>1-oct-2026 Servicio expuesto con Exito via HCP Terraform GitOps!</h1>" | sudo tee /var/www/html/index.html
               EOF
 
   tags = {
